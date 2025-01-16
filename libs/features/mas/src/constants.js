@@ -86,3 +86,23 @@ export const Landscape = {
     DRAFT: 'DRAFT',
     PUBLISHED: 'PUBLISHED',
 };
+
+export const WORKFLOW_STEP = {
+  CHECKOUT: 'checkout',
+  CHECKOUT_EMAIL: 'checkout/email',
+  SEGMENTATION: 'segmentation',
+  BUNDLE: 'bundle',
+  COMMITMENT: 'commitment',
+  RECOMMENDATION: 'recommendation',
+  EMAIL: 'email',
+  PAYMENT: 'payment',
+  CHANGE_PLAN_TEAM_PLANS: 'change-plan/team-upgrade/plans',
+  CHANGE_PLAN_TEAM_PAYMENT: 'change-plan/team-upgrade/payment',
+}
+
+export const PROVIDER_ENVIRONMENT = {
+  PRODUCTION: 'PRODUCTION',
+  //@TODO: add missing values!
+};
+
+
