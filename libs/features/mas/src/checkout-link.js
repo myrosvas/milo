@@ -5,6 +5,7 @@ import {
     MasElement,
 } from './mas-element.js';
 import { selectOffers, useService } from './utilities.js';
+import { MODAL_TYPE_3_IN_1 } from './constants.js';
 
 export const CLASS_NAME_DOWNLOAD = 'download';
 export const CLASS_NAME_UPGRADE = 'upgrade';
@@ -171,6 +172,59 @@ export class CheckoutLink extends HTMLAnchorElement {
         );
     }
 
+    addCommerceParams(url, modalType) {
+      try {
+        const newUrl = new URL(url);
+        newUrl.searchParams.set('ctx', 'if');
+        const promo = newUrl.searchParams.get('promo');
+        if (promo) {
+          newUrl.searchParams.set('promoid', promo);
+        }
+        if (modalType === MODAL_TYPE_3_IN_1.CRM) {
+          newUrl.searchParams.set('af', 'uc_segmentation_hide_tabs');
+        }
+        if (modalType === MODAL_TYPE_3_IN_1.TWP) {
+          newUrl.searchParams.set('ot', 'trial');
+        }
+        return newUrl.toString();
+      } catch (error) {
+        // do nothing
+      }
+    }
+
+    setModalTypeAndHref(el, url, offers, version, options, service) {
+      if (!el || !url || !offers || !version || !options || !service) {
+        this.setAttribute('href', '#');
+        return;
+      };
+      // @TODO: Remove when finished working on the task
+      // url = 'https://www.adobe.com/mini-plans/photoshop.html?mid=ft&web=1&modal=crm'
+      url = 'https://www.adobe.com/mini-plans/photoshop.html?mid=ft&web=1&modal=twp'
+      try {
+        const newUrl = new URL(url);
+        const modalType = newUrl.searchParams.get('modal');
+        if (![MODAL_TYPE_3_IN_1.TWP, MODAL_TYPE_3_IN_1.D2P, MODAL_TYPE_3_IN_1.CRM].includes(modalType)) {
+          this.setAttribute('href', '#');
+          return;
+        }
+        this.setAttribute('data-modal-type', modalType);
+        if (offers.length) {
+          if (this.masElement.toggleResolved(version, offers, options)) {
+              const url = service.buildCheckoutURL(offers, options);
+              const urlWithParams = this.addCommerceParams(url, modalType)
+              this.setAttribute('href', urlWithParams);
+          }
+        } else {
+            const error = new Error(`Not provided: ${options?.wcsOsi ?? '-'}`);
+            if (this.masElement.toggleFailed(version, error, options)) {
+                this.setAttribute('href', '#');
+            }
+        }
+      } catch (error) {
+        // do nothing
+      }
+    }
+
     /**
      * Renders checkout link href for provided offers into this component.
      * @param {Commerce.Wcs.Offer[]} offers
@@ -205,7 +259,7 @@ export class CheckoutLink extends HTMLAnchorElement {
             if (text) this.firstElementChild.innerHTML = text;
             if (className) this.classList.add(...className.split(' '));
             if (handler) {
-                this.setAttribute('href', '#');
+                this.setModalTypeAndHref(this, url, offers, version, options, service);
                 this.#checkoutActionHandler = handler.bind(this);
             }
             return true;
