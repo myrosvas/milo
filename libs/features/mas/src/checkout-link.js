@@ -176,15 +176,8 @@ export class CheckoutLink extends HTMLAnchorElement {
       try {
         const newUrl = new URL(url);
         newUrl.searchParams.set('ctx', 'if');
-        const promo = newUrl.searchParams.get('promo');
-        if (promo) {
-          newUrl.searchParams.set('promoid', promo);
-        }
         if (modalType === MODAL_TYPE_3_IN_1.CRM) {
           newUrl.searchParams.set('af', 'uc_segmentation_hide_tabs');
-        }
-        if (modalType === MODAL_TYPE_3_IN_1.TWP) {
-          newUrl.searchParams.set('ot', 'trial');
         }
         return newUrl.toString();
       } catch (error) {
@@ -197,9 +190,6 @@ export class CheckoutLink extends HTMLAnchorElement {
         this.setAttribute('href', '#');
         return;
       };
-      // @TODO: Remove when finished working on the task
-      // url = 'https://www.adobe.com/mini-plans/photoshop.html?mid=ft&web=1&modal=crm'
-      url = 'https://www.adobe.com/mini-plans/photoshop.html?mid=ft&web=1&modal=twp'
       try {
         const newUrl = new URL(url);
         const modalType = newUrl.searchParams.get('modal');
