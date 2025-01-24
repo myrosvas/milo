@@ -127,6 +127,12 @@ const GeoMap = {
   th_th: 'TH_th',
 };
 
+export const MODAL_TYPE_3_IN_1 = {
+  TWP: 'twp',
+  D2P: 'd2p',
+  CRM: 'crm',
+};
+
 export function getMiloLocaleSettings(locale) {
   const localePrefix = locale?.prefix || 'US_en';
   const geo = localePrefix.replace('/', '') ?? '';
@@ -496,7 +502,7 @@ export async function openModal(e, url, offerType, hash, extraOptions, el) {
     const fragmentPath = url.split(/(hlx|aem).(page|live)/).pop();
     modal = await openFragmentModal(fragmentPath, getModal);
   } else {
-    const isThreeInOneModal = el?.getAttribute('data-modal-type') && el.href;
+    const isThreeInOneModal = [MODAL_TYPE_3_IN_1.CRM, MODAL_TYPE_3_IN_1.D2P, MODAL_TYPE_3_IN_1.TWP].includes(el?.getAttribute('data-modal-type')) && el?.href;
     if (isThreeInOneModal) {
       const { default: openThreeInOneModal } = await import('./threeInOne.js');
       modal = await openThreeInOneModal(el);

@@ -21,7 +21,7 @@ const PARAMETERS = new Map([
 ]);
 /*?*
  * List of the keys that can be used to construct Checkout URL.
- * Allow-listing is required because some consumers of the libraty don't use Typescript so they can pass any object as
+ * Allow-listing is required because some consumers of the library don't use Typescript so they can pass any object as
  * 'checkoutData'. The library will ignore any unknown key in 'checkoutData'.
  */
 const ALLOWED_KEYS = new Set([

@@ -44,12 +44,10 @@ const handle3in1IFrameEvents = ({ data: msgData }) => {
       window.open(data.externalUrl, data.target);
       break;
     case MSG_SUBTYPE.OrderComplete:
-      // @TODO: should we do anything here?
       break;
     case MSG_SUBTYPE.Error:
       break;
     case MSG_SUBTYPE.Close:
-      // @TODO: should the modal get closed on Esc as well?
       document.querySelector('.dialog-modal.three-in-one')?.dispatchEvent(new Event('closeModal'));
       break;
     default:
